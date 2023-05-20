@@ -154,3 +154,46 @@ class Grupo(models.Model):
         db_table ='Grupo'
         verbose_name = 'Grupo'
         verbose_name_plural= 'Grupos'
+        
+        
+class Historial_Academico(models.Model):
+    Id_Historial = models.AutoField(primary_key=True,unique=True)
+    Papa= models.FloatField()
+    Papi= models.FloatField()
+    Pa = models.FloatField()
+    Estudiante = models.ForeignKey(estudiante,on_delete=models.CASCADE)
+    Programa = models .ForeignKey(Programa,on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table='Historial_Academico'
+        verbose_name = 'Historial_Academico'
+        verbose_name_plural = 'Historiales_Academicos'
+        
+        
+class Cupo_Creditos(models.Model):
+    Creditos_Adicionales = models.IntegerField()
+    Cupo_Creditos= models.IntegerField()
+    Creditos_Disponibles = models.IntegerField()
+    Creditos_Doble_titulacion = models.IntegerField()
+    Historial= models.ForeignKey(Historial_Academico,on_delete=models.CASCADE)
+    
+    
+    class Meta: 
+        db_table ='Cupo_Credito'
+        verbose_name = 'Cupo_Credito'
+        verbose_name_plural= 'Cupo_Creditos'
+        
+        
+        
+class Resumen_Creditos(models.Model):
+    Creditos_Exigidos = models.IntegerField()
+    Creditos_Aprobados = models.IntegerField()
+    Pendientes = models.IntegerField()
+    Inscritos = models.IntegerField()
+    Cursados = models.IntegerField()
+    Historial =  models.ForeignKey(Historial_Academico,on_delete=models.CASCADE)
+    
+    class Meta: 
+        db_table ='Resumen_Credito'
+        verbose_name = 'Resumen_Credito'
+        verbose_name_plural= 'Resumen_Creditos'
