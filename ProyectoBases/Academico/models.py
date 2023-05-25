@@ -215,11 +215,18 @@ class Inscripcion_cancelacion(models.Model):
     Creditos_Disponibles = models.IntegerField()
     Semestre = models.IntegerField()
     Cita = models.OneToOneField(Cita_Inscripcion,on_delete=models.CASCADE)
+    grupo = models.ManyToManyField(Grupo)
     class Meta:
         db_table='Inscripcion_cancelacion'
         verbose_name = 'Inscripcion_cancelacion'
         verbose_name_plural = 'Inscripciones_cancelaciones'
         
+    def save (self,*args, **kwargs):
+        super(Inscripcion_cancelacion,self).save(*args, **kwargs)
+        grupos = self.grupo.all()
+        print(grupos)
+        print(self.grupo.all())
+        print(self.grupo)            
 
 class Espacio(models.Model):
     Id_espacio = models.AutoField(primary_key=True,unique=True)
