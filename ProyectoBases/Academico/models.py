@@ -148,7 +148,7 @@ class Grupo(models.Model):
     Numero_grupo=models.IntegerField()
     Cupos = models.IntegerField()
     Asignatura = models.ForeignKey(Asignatura,on_delete=models.CASCADE)
-    Profesor = models.ManyToManyField(Docente)
+    Profesor = models.ForeignKey(Docente, on_delete=models.CASCADE)
     
     class Meta: 
         db_table ='Grupo'
