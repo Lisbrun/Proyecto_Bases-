@@ -70,3 +70,16 @@ class admin_inscripcioncancelacion(admin.ModelAdmin):
 @admin.register(Espacio)
 class admin_espacio(admin.ModelAdmin):
     pass
+
+
+@admin.register(Inscripcion_cancelacion_grupo)
+class admin_inscripcioncancelaciongrupo(admin.ModelAdmin):
+    pass
+
+@admin.register(Notas)
+class admin_notas(admin.ModelAdmin):
+    exclude=('Id_Nota',)
+    
+@admin.register(Pago_Semestre)
+class admin_notas(admin.ModelAdmin):
+    pass

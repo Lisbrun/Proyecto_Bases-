@@ -148,7 +148,7 @@ class Grupo(models.Model):
     Numero_grupo=models.IntegerField()
     Cupos = models.IntegerField()
     Asignatura = models.ForeignKey(Asignatura,on_delete=models.CASCADE)
-    Profesor = models.ManyToManyField(Docente)
+    Profesor = models.ForeignKey(Docente, on_delete=models.CASCADE)
     
     class Meta: 
         db_table ='Grupo'
@@ -158,9 +158,9 @@ class Grupo(models.Model):
         
 class Historial_Academico(models.Model):
     Id_Historial = models.AutoField(primary_key=True,unique=True)
-    Papa= models.FloatField()
-    Papi= models.FloatField()
-    Pa = models.FloatField()
+    Papa= models.FloatField(default=0.0)
+    Papi= models.FloatField(default=0.0)
+    Pa = models.FloatField(default=0.0 )
     Estudiante = models.ForeignKey(estudiante,on_delete=models.CASCADE)
     Matriculas = models.IntegerField()
     Programa = models.OneToOneField(Programa,on_delete=models.CASCADE)
@@ -172,10 +172,10 @@ class Historial_Academico(models.Model):
         
         
 class Cupo_Creditos(models.Model):
-    Creditos_Adicionales = models.IntegerField()
-    Cupo_Creditos= models.IntegerField()
+    Creditos_Adicionales = models.IntegerField(default=0)
+    Cupo_Creditos= models.IntegerField(default=0)
     Creditos_Disponibles = models.IntegerField()
-    Creditos_Doble_titulacion = models.IntegerField()
+    Creditos_Doble_titulacion = models.IntegerField(default=0)
     Historial= models.OneToOneField(Historial_Academico,on_delete=models.CASCADE)
     
     
@@ -187,11 +187,11 @@ class Cupo_Creditos(models.Model):
         
         
 class Resumen_Creditos(models.Model):
-    Creditos_Exigidos = models.IntegerField()
-    Creditos_Aprobados = models.IntegerField()
-    Pendientes = models.IntegerField()
-    Inscritos = models.IntegerField()
-    Cursados = models.IntegerField()
+    Creditos_Exigidos = models.IntegerField(null=True)
+    Creditos_Aprobados = models.IntegerField(null=True)
+    Pendientes = models.IntegerField(null=True)
+    Inscritos = models.IntegerField(null=True)
+    Cursados = models.IntegerField(null=True)
     Historial =  models.OneToOneField(Historial_Academico,on_delete=models.CASCADE)
     
     class Meta: 
@@ -219,7 +219,16 @@ class Inscripcion_cancelacion(models.Model):
         db_table='Inscripcion_cancelacion'
         verbose_name = 'Inscripcion_cancelacion'
         verbose_name_plural = 'Inscripciones_cancelaciones'
-        
+
+class Inscripcion_cancelacion_grupo(models.Model):
+        Id= models.AutoField(primary_key=True,unique=True)
+        Inscripcion= models.ForeignKey(Inscripcion_cancelacion,on_delete=models.CASCADE)
+        Grupo = models.ForeignKey(Grupo,on_delete=models.CASCADE)
+    
+        class Meta:
+            db_table = 'Inscripcion_cancelacion_grupo'
+            verbose_name = 'Inscripcion_cancelacion_grupo'
+            verbose_name_plural = 'Inscripcion_cancelacion_grupos'      
 
 class Espacio(models.Model):
     Id_espacio = models.AutoField(primary_key=True,unique=True)
@@ -228,3 +237,41 @@ class Espacio(models.Model):
     Edificio = models.CharField(max_length=100)
     Salon = models.IntegerField()
     Grupo= models.ForeignKey(Grupo,on_delete=models.CASCADE)
+    
+class Meta:
+    db_table='Espacio'
+    verbose_name = 'Espacio'
+    verbose_name_plural = 'Espacios'
+    
+    
+    
+    
+class Notas(models.Model):
+    Id_Nota = models.AutoField(primary_key=True,unique=True)
+    Primer_Corte = models.FloatField(null=True,blank=True)
+    Segundo_Corte = models.FloatField(null=True,blank=True)
+    Tercer_Corte = models.FloatField(null=True,blank=True)  
+    Nota_Definitiva = models.FloatField(null=True,blank=True)
+    Aprobada = models.BooleanField()
+    Inscripcion= models.ForeignKey(Inscripcion_cancelacion_grupo,on_delete=models.CASCADE)
+    Historial = models.ManyToManyField(Historial_Academico)
+
+    class Meta:
+        db_table = 'Notas'
+        verbose_name = 'Nota'
+        verbose_name_plural = 'Notas'
+        
+
+
+class Pago_Semestre(models.Model):
+    Id_Pago = models.AutoField(primary_key=True,unique=True)
+    Fecha = models.DateField()
+    Verificacion = models.BooleanField()
+    Historial = models.ForeignKey(Historial_Academico,on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table = 'Pago_Semestre'
+        verbose_name = 'Pago_Semestre'
+        verbose_name_plural = 'Pagos_Semestre'
+        
+        
