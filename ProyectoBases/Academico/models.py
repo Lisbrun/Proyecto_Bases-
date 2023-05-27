@@ -158,9 +158,9 @@ class Grupo(models.Model):
         
 class Historial_Academico(models.Model):
     Id_Historial = models.AutoField(primary_key=True,unique=True)
-    Papa= models.FloatField()
-    Papi= models.FloatField()
-    Pa = models.FloatField()
+    Papa= models.FloatField(default=0.0)
+    Papi= models.FloatField(default=0.0)
+    Pa = models.FloatField(default=0.0 )
     Estudiante = models.ForeignKey(estudiante,on_delete=models.CASCADE)
     Matriculas = models.IntegerField()
     Programa = models.OneToOneField(Programa,on_delete=models.CASCADE)
@@ -172,10 +172,10 @@ class Historial_Academico(models.Model):
         
         
 class Cupo_Creditos(models.Model):
-    Creditos_Adicionales = models.IntegerField()
-    Cupo_Creditos= models.IntegerField()
+    Creditos_Adicionales = models.IntegerField(default=0)
+    Cupo_Creditos= models.IntegerField(default=0)
     Creditos_Disponibles = models.IntegerField()
-    Creditos_Doble_titulacion = models.IntegerField()
+    Creditos_Doble_titulacion = models.IntegerField(default=0)
     Historial= models.OneToOneField(Historial_Academico,on_delete=models.CASCADE)
     
     
@@ -187,11 +187,11 @@ class Cupo_Creditos(models.Model):
         
         
 class Resumen_Creditos(models.Model):
-    Creditos_Exigidos = models.IntegerField()
-    Creditos_Aprobados = models.IntegerField()
-    Pendientes = models.IntegerField()
-    Inscritos = models.IntegerField()
-    Cursados = models.IntegerField()
+    Creditos_Exigidos = models.IntegerField(null=True)
+    Creditos_Aprobados = models.IntegerField(null=True)
+    Pendientes = models.IntegerField(null=True)
+    Inscritos = models.IntegerField(null=True)
+    Cursados = models.IntegerField(null=True)
     Historial =  models.OneToOneField(Historial_Academico,on_delete=models.CASCADE)
     
     class Meta: 
@@ -246,22 +246,18 @@ class Meta:
     
     
     
-   
-    class Notas(models.Model):
-        Id_Nota = models.AutoField(primary_key=True,unique=True)
-        Primer_Corte = models.FloatField(null=True)
-        Segundo_Corte = models.FloatField(null=True)
-        Tercer_Corte = models.FloatField(null=True)  
-        Nota_Definitiva = models.FloatField(null=True)
-        Aprobada = models.BooleanField()
-        Inscripcion= models.ForeignKey(Inscripcion_cancelacion_grupo,on_delete=models.CASCADE)
-        Historial = models.ManyToManyField(Historial_Academico)
-    
-        class Meta:
-            db_table = 'Notas'
-            verbose_name = 'ModelName'
-            verbose_name_plural = 'ModelNames'
-            
-        def __str__(self):
-            pass
-    
+class Notas(models.Model):
+    Id_Nota = models.AutoField(primary_key=True,unique=True)
+    Primer_Corte = models.FloatField(null=True,blank=True)
+    Segundo_Corte = models.FloatField(null=True,blank=True)
+    Tercer_Corte = models.FloatField(null=True,blank=True)  
+    Nota_Definitiva = models.FloatField(null=True,blank=True)
+    Aprobada = models.BooleanField()
+    Inscripcion= models.ForeignKey(Inscripcion_cancelacion_grupo,on_delete=models.CASCADE)
+    Historial = models.ManyToManyField(Historial_Academico)
+
+    class Meta:
+        db_table = 'Notas'
+        verbose_name = 'Nota'
+        verbose_name_plural = 'Notas'
+        
