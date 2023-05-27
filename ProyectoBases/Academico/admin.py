@@ -79,3 +79,7 @@ class admin_inscripcioncancelaciongrupo(admin.ModelAdmin):
 @admin.register(Notas)
 class admin_notas(admin.ModelAdmin):
     exclude=('Id_Nota',)
+    
+@admin.register(Pago_Semestre)
+class admin_notas(admin.ModelAdmin):
+    pass

@@ -261,3 +261,17 @@ class Notas(models.Model):
         verbose_name = 'Nota'
         verbose_name_plural = 'Notas'
         
+
+
+class Pago_Semestre(models.Model):
+    Id_Pago = models.AutoField(primary_key=True,unique=True)
+    Fecha = models.DateField()
+    Verificacion = models.BooleanField()
+    Historial = models.ForeignKey(Historial_Academico,on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table = 'Pago_Semestre'
+        verbose_name = 'Pago_Semestre'
+        verbose_name_plural = 'Pagos_Semestre'
+        
+        
