@@ -215,18 +215,20 @@ class Inscripcion_cancelacion(models.Model):
     Creditos_Disponibles = models.IntegerField()
     Semestre = models.IntegerField()
     Cita = models.OneToOneField(Cita_Inscripcion,on_delete=models.CASCADE)
-    grupo = models.ManyToManyField(Grupo)
     class Meta:
         db_table='Inscripcion_cancelacion'
         verbose_name = 'Inscripcion_cancelacion'
         verbose_name_plural = 'Inscripciones_cancelaciones'
-        
-    def save (self,*args, **kwargs):
-        super(Inscripcion_cancelacion,self).save(*args, **kwargs)
-        grupos = self.grupo.all()
-        print(grupos)
-        print(self.grupo.all())
-        print(self.grupo)            
+
+class Inscripcion_cancelacion_grupo(models.Model):
+        Id= models.AutoField(primary_key=True,unique=True)
+        Inscripcion= models.ForeignKey(Inscripcion_cancelacion,on_delete=models.CASCADE)
+        Grupo = models.ForeignKey(Grupo,on_delete=models.CASCADE)
+    
+        class Meta:
+            db_table = 'Inscripcion_cancelacion_grupo'
+            verbose_name = 'Inscripcion_cancelacion_grupo'
+            verbose_name_plural = 'Inscripcion_cancelacion_grupos'      
 
 class Espacio(models.Model):
     Id_espacio = models.AutoField(primary_key=True,unique=True)
@@ -235,3 +237,31 @@ class Espacio(models.Model):
     Edificio = models.CharField(max_length=100)
     Salon = models.IntegerField()
     Grupo= models.ForeignKey(Grupo,on_delete=models.CASCADE)
+    
+class Meta:
+    db_table='Espacio'
+    verbose_name = 'Espacio'
+    verbose_name_plural = 'Espacios'
+    
+    
+    
+    
+   
+    class Notas(models.Model):
+        Id_Nota = models.AutoField(primary_key=True,unique=True)
+        Primer_Corte = models.FloatField(null=True)
+        Segundo_Corte = models.FloatField(null=True)
+        Tercer_Corte = models.FloatField(null=True)  
+        Nota_Definitiva = models.FloatField(null=True)
+        Aprobada = models.BooleanField()
+        Inscripcion= models.ForeignKey(Inscripcion_cancelacion_grupo,on_delete=models.CASCADE)
+        Historial = models.ManyToManyField(Historial_Academico)
+    
+        class Meta:
+            db_table = 'Notas'
+            verbose_name = 'ModelName'
+            verbose_name_plural = 'ModelNames'
+            
+        def __str__(self):
+            pass
+    
