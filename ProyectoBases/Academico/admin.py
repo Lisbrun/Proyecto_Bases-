@@ -47,3 +47,26 @@ class admin_residencia(admin.ModelAdmin):
 @admin.register(Grupo)
 class admin_grupo(admin.ModelAdmin):
     pass
+
+@admin.register(Historial_Academico)
+class admin_historial(admin.ModelAdmin):
+    pass
+
+@admin.register(Cupo_Creditos)
+class admin_cupocreditos(admin.ModelAdmin):
+    pass
+
+@admin.register(Resumen_Creditos)
+class admin_resumencreditos(admin.ModelAdmin):
+    pass
+@admin.register(Cita_Inscripcion)
+class admin_citainscripcion(admin.ModelAdmin):
+    pass
+
+@admin.register(Inscripcion_cancelacion)
+class admin_inscripcioncancelacion(admin.ModelAdmin):
+    pass
+
+@admin.register(Espacio)
+class admin_espacio(admin.ModelAdmin):
+    pass

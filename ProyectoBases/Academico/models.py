@@ -34,7 +34,7 @@ class Persona_vinculada(models.Model):
 class estudiante (models.Model):
     Id_estudiante = models.AutoField(primary_key=True,unique=True,null=False,blank=True)
     Peama = models.BooleanField(help_text="Pertenece al grupo Peama")
-    Persona_Vinculada = models.ForeignKey(Persona_vinculada, on_delete=models.CASCADE)
+    Persona_Vinculada = models.OneToOneField(Persona_vinculada, on_delete=models.CASCADE)
     
     
     class Meta: 
@@ -70,8 +70,8 @@ class Sede (models.Model):
         
 class Docente (models.Model):
     Id_docente = models.AutoField(primary_key=True,unique=True)
-    Persona_Vinculada = models.ForeignKey(Persona_vinculada, on_delete=models.CASCADE)
-    Sede = models.ForeignKey(Sede,on_delete=models.CASCADE)
+    Persona_Vinculada = models.OneToOneField(Persona_vinculada, on_delete=models.CASCADE)
+    Sede = models.OneToOneField(Sede,on_delete=models.CASCADE)
     Ocasional = models.BooleanField(default=False)
     
     class Meta:
@@ -82,7 +82,7 @@ class Docente (models.Model):
         
 class Decano (models.Model):
     Id_decano = models.AutoField(primary_key=True,unique=True)
-    Docente= models.ForeignKey(Docente,on_delete=models.CASCADE)
+    Docente= models.OneToOneField(Docente,on_delete=models.CASCADE)
     Ejerciendo = models.BooleanField(default=True)
 
     class Meta: 
@@ -148,9 +148,90 @@ class Grupo(models.Model):
     Numero_grupo=models.IntegerField()
     Cupos = models.IntegerField()
     Asignatura = models.ForeignKey(Asignatura,on_delete=models.CASCADE)
-    
+    Profesor = models.ManyToManyField(Docente)
     
     class Meta: 
         db_table ='Grupo'
         verbose_name = 'Grupo'
         verbose_name_plural= 'Grupos'
+        
+        
+class Historial_Academico(models.Model):
+    Id_Historial = models.AutoField(primary_key=True,unique=True)
+    Papa= models.FloatField()
+    Papi= models.FloatField()
+    Pa = models.FloatField()
+    Estudiante = models.ForeignKey(estudiante,on_delete=models.CASCADE)
+    Matriculas = models.IntegerField()
+    Programa = models.OneToOneField(Programa,on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table='Historial_Academico'
+        verbose_name = 'Historial_Academico'
+        verbose_name_plural = 'Historiales_Academicos'
+        
+        
+class Cupo_Creditos(models.Model):
+    Creditos_Adicionales = models.IntegerField()
+    Cupo_Creditos= models.IntegerField()
+    Creditos_Disponibles = models.IntegerField()
+    Creditos_Doble_titulacion = models.IntegerField()
+    Historial= models.OneToOneField(Historial_Academico,on_delete=models.CASCADE)
+    
+    
+    class Meta: 
+        db_table ='Cupo_Credito'
+        verbose_name = 'Cupo_Credito'
+        verbose_name_plural= 'Cupo_Creditos'
+        
+        
+        
+class Resumen_Creditos(models.Model):
+    Creditos_Exigidos = models.IntegerField()
+    Creditos_Aprobados = models.IntegerField()
+    Pendientes = models.IntegerField()
+    Inscritos = models.IntegerField()
+    Cursados = models.IntegerField()
+    Historial =  models.OneToOneField(Historial_Academico,on_delete=models.CASCADE)
+    
+    class Meta: 
+        db_table ='Resumen_Credito'
+        verbose_name = 'Resumen_Credito'
+        verbose_name_plural= 'Resumen_Creditos'
+        
+        
+class Cita_Inscripcion (models.Model):
+    Id_cita = models.AutoField(primary_key=True,unique=True)
+    Fecha = models.DateField()
+    Hora= models.TimeField()
+    Historial = models.ForeignKey(Historial_Academico,on_delete=models.CASCADE) 
+    class Meta:
+        db_table='Cita_Inscripcion'
+        verbose_name = 'Cita_Inscripcion'
+        verbose_name_plural = 'Citas_Inscripcion'
+        
+class Inscripcion_cancelacion(models.Model):
+    Id_incripcion = models.AutoField(primary_key=True,unique=True)
+    Creditos_Disponibles = models.IntegerField()
+    Semestre = models.IntegerField()
+    Cita = models.OneToOneField(Cita_Inscripcion,on_delete=models.CASCADE)
+    grupo = models.ManyToManyField(Grupo)
+    class Meta:
+        db_table='Inscripcion_cancelacion'
+        verbose_name = 'Inscripcion_cancelacion'
+        verbose_name_plural = 'Inscripciones_cancelaciones'
+        
+    def save (self,*args, **kwargs):
+        super(Inscripcion_cancelacion,self).save(*args, **kwargs)
+        grupos = self.grupo.all()
+        print(grupos)
+        print(self.grupo.all())
+        print(self.grupo)            
+
+class Espacio(models.Model):
+    Id_espacio = models.AutoField(primary_key=True,unique=True)
+    Dia = models.DateField()
+    Hora= models.TimeField()
+    Edificio = models.CharField(max_length=100)
+    Salon = models.IntegerField()
+    Grupo= models.ForeignKey(Grupo,on_delete=models.CASCADE)
