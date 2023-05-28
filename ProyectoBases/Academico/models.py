@@ -234,7 +234,7 @@ class Inscripcion_cancelacion_grupo(models.Model):
 
 class Espacio(models.Model):
     Id_espacio = models.AutoField(primary_key=True,unique=True)
-    Dia = models.DateField()
+    Dia = models.CharField(max_length=100)
     Hora= models.TimeField()
     Edificio = models.CharField(max_length=100)
     Salon = models.IntegerField()
