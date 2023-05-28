@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'phone_field',
     'academico',
+    
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ProyectoBases.wsgi.application'
 
-
+AUTHENTICATION_BACKENDS = ['academico.backends.EmailBackend']
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 

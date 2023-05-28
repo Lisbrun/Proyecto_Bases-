@@ -1,11 +1,13 @@
 from django.db import models
+from django.conf import settings
+#import User
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator,MinValueValidator
 
 from phone_field import PhoneField
 class Persona_vinculada(models.Model):
     Documento = models.IntegerField(primary_key=True,null=False,blank=False,unique=True)
-    Usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    Usuario = models.OneToOneField( settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     Tipo_Documento= models.CharField(max_length=20,null=False,blank=False)
     Nombre = models.CharField(max_length=50,null=False,blank=False)
     Apellido = models.CharField(max_length=50,null=False,blank=False)
